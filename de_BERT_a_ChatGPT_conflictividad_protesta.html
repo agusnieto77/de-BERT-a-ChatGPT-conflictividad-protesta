@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>De BERT a ChatGPT &middot; II. Estado del arte &middot; Taller abierto: Introducci&oacute;n a la automatizaci&oacute;n del an&aacute;lisis de la protesta social</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <header class="masthead">
+        <div class="masthead-brand"><span class="masthead-brand-mark"></span>De BERT a ChatGPT &middot; Estado del arte</div>
+        <div class="masthead-meta">Taller abierto &middot; 7 de agosto de 2026</div>
+    </header>
+
+    <!-- Slide 1: Portada -->
+    <section class="slide cover active" data-slide="01">
+        <div class="cover-overline">TALLER ABIERTO &middot; INTRODUCCI&Oacute;N A LA AUTOMATIZACI&Oacute;N DEL AN&Aacute;LISIS DE LA PROTESTA SOCIAL</div>
+        <h1 class="cover-title">De BERT a <em>ChatGPT</em></h1>
+        <p class="cover-subtitle">II. Estado del arte &middot; Herramientas y desarrollos recientes en an&aacute;lisis automatizado de eventos de protesta</p>
+        <div class="cover-footer">
+            <div class="cover-meta-item cover-meta-item--organiza"><span class="cover-meta-label">Organiza</span><span class="cover-meta-value"><img src="img/footer.png" alt="Logos institucionales: Facultad de Ciencias Sociales, Observatorio de Conflictividad, GESET y NCSC" class="cover-org-logos"></span></div>
+            <div class="cover-meta-item cover-meta-item--expositores"><span class="cover-meta-label">Expositores</span><span class="cover-meta-value">Agust&iacute;n Nieto (UNMDP) &middot; Francisco Favieri (UNSJ) &middot; Beatriz Soria (UNCuyo)</span></div>
+            <div class="cover-meta-item cover-meta-item--fecha"><span class="cover-meta-label">Fecha</span><span class="cover-meta-value">7 de agosto de 2026</span></div>
+        </div>
+    </section>
+
+    <!-- Slide 2: El procedimiento de medición -->
+    <section class="slide" data-slide="02">
+        <span class="slide-number">02 / 17</span>
+        <div class="eyebrow">Punto de partida</div>
+        <h2 class="slide-title">No evaluamos modelos, evaluamos <em>procedimientos de medici&oacute;n</em></h2>
+        <p class="slide-lead">Conviene empezar descentrando al modelo: en CSC, el punto de partida no deber&iacute;a ser un benchmark, sino los conceptos que delimitan lo que queremos medir: protesta, huelga, represi&oacute;n. Un codebook traduce esos conceptos en criterios observables; un procedimiento de medici&oacute;n [modelo, prompt, par&aacute;metros y esquema de salida] aplica esos criterios a los textos y los transforma en registros; y esos registros s&oacute;lo pueden sostener una inferencia si el procedimiento ha sido adecuadamente validado. La evoluci&oacute;n de BERT a GPT no elimina los problemas cl&aacute;sicos de medici&oacute;n: modifica las capacidades del instrumento y desplaza el lugar en el que esos problemas deben resolverse.</p>
+
+        <div class="rule"></div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>La cadena.</strong> Concepto &rarr; codebook &rarr; procedimiento &rarr; registros. Lo importante es poder recorrer esa cadena en ambos sentidos: producir datos, pero tambi&eacute;n volver sobre las definiciones y decisiones cuando los resultados no representan bien lo que quer&iacute;amos medir.</div></li>
+            <li><span></span><div><strong>Lo que cada arquitectura ampl&iacute;a.</strong> BoW / TF–IDF representa documentos con se&ntilde;ales observables; BERT clasifica y extrae atributos con contexto; GPT especifica tareas y registros mediante instrucciones. Son instrumentos distintos para aplicar una misma operacionalizaci&oacute;n, no etapas de una carrera.</div></li>
+            <li><span></span><div><strong>Dos errores frecuentes.</strong> Suponer que un modelo potente &ldquo;descubre&rdquo; por s&iacute; mismo la categor&iacute;a relevante, y <span class="hl hl--lilac">confundir una salida coherente con una medida v&aacute;lida</span>. Una respuesta plausible no es evidencia localizada en el texto.</div></li>
+            <li><span></span><div><strong>Definir mal qu&eacute; queremos medir no es lo mismo que medirlo mal.</strong> Si el codebook deja fuera una dimensi&oacute;n importante —por ejemplo, la violencia ejercida por los manifestantes—, el problema no est&aacute; en que el modelo clasifique mal los casos, sino en que le estamos pidiendo que mida una definici&oacute;n incompleta. El modelo puede ser perfectamente consistente y, aun as&iacute;, producir una medida equivocada.</div></li>
+        </ul>
+
+        <div class="pull-quote pull-quote--centered-line">
+            <blockquote>&ldquo;La innovaci&oacute;n acelera y flexibiliza la medici&oacute;n; no decide qu&eacute; cuenta como &lsquo;protesta&rsquo;.&rdquo;</blockquote>
+        </div>
+
+    </section>
+
+    <!-- Slide 3: Antes de BERT -->
+    <section class="slide" data-slide="03">
+        <span class="slide-number">03 / 17</span>
+        <div class="eyebrow">Antes del salto</div>
+        <h2 class="slide-title">Antes de BERT: el texto era &uacute;til, pero <em>pobre en contexto</em></h2>
+        <p class="slide-lead">Con Bag of Words y TF–IDF un documento se transforma en una distribuci&oacute;n de t&eacute;rminos: una soluci&oacute;n potente para recuperar, clasificar y explorar —barata, transparente y f&aacute;cil de auditar—, pero que no distingue entre frases que contienen las mismas palabras y expresan relaciones distintas.</p>
+
+        <div class="rule"></div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>BoW / TF–IDF.</strong> Representa un documento por la frecuencia de sus palabras: pierde orden y relaciones. Aun as&iacute; impuls&oacute; sistemas reales porque es barato, transparente y f&aacute;cil de auditar: para no perder notas relevantes, se prefiere recuperar algunas de m&aacute;s antes que dejar afuera una importante.</div></li>
+            <li><span></span><div><strong>Word2Vec.</strong> Palabras = vectores: t&eacute;rminos usados en contextos similares quedan cerca en un espacio vectorial. Mejora muchas tareas, pero cada palabra conserva una representaci&oacute;n relativamente fija fuera de su oraci&oacute;n.</div></li>
+            <li><span></span><div><strong>Clasificaci&oacute;n supervisada.</strong> Sobre representaciones como BoW, TF–IDF o Word2Vec, algoritmos como regresi&oacute;n log&iacute;stica o SVM aprenden a distinguir categor&iacute;as a partir de casos previamente codificados. Esto conecta el texto con el codebook, pero exige datos etiquetados y puede degradarse ante clases raras o cambios de corpus y per&iacute;odo.</div></li>
+        </ul>
+
+        <div class="pull-quote pull-quote--centered-line">
+            <blockquote>&ldquo;La transici&oacute;n decisiva fue dejar de preguntar qu&eacute; palabras aparecen para poder preguntar qu&eacute; hacen juntas en una oraci&oacute;n.&rdquo;</blockquote>
+        </div>
+
+    </section>
+
+    <!-- Slide 4: Transformer -->
+    <section class="slide" data-slide="04">
+        <span class="slide-number">04 / 17</span>
+        <div class="eyebrow">Arquitectura &middot; 2017</div>
+        <h2 class="slide-title">Transformer: el contexto se vuelve <em>relacional</em></h2>
+        <p class="slide-lead">La novedad es que, para interpretar una palabra, el modelo puede mirar otras partes de la oraci&oacute;n aunque est&eacute;n lejos. En &ldquo;las organizaciones convocaron una marcha contra el aumento&rdquo;, &ldquo;marcha&rdquo; se entiende por qui&eacute;n convoc&oacute; y contra qu&eacute;. La innovaci&oacute;n no fue &ldquo;m&aacute;s datos&rdquo;, sino una forma de procesar en paralelo que hizo viable aprender de mucho texto y reutilizarlo.</p>
+
+        <div class="rule"></div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>Paralelismo.</strong> Al procesar todas las posiciones a la vez, el entrenamiento y el uso se vuelven mucho m&aacute;s eficientes.</div></li>
+            <li><span></span><div><strong>Contexto cercano y distante.</strong> El mecanismo permite que distintas partes se enfoquen en distintos tipos de relaci&oacute;n y mantiene el orden de las palabras. As&iacute;, palabras lejanas pueden influir en la interpretaci&oacute;n.</div></li>
+            <li><span></span><div><strong>Una base, varios usos.</strong> La misma idea de calcular contexto se usa de formas distintas: para representar el texto completo, para continuarlo, o para conectar entrada y salida. Esa base com&uacute;n se reutiliz&oacute; en toda la familia posterior.</div></li>
+            <li><span></span><div><strong>Capacidad, no definici&oacute;n.</strong> La evaluaci&oacute;n original fue en traducci&oacute;n, no en protesta. La t&eacute;cnica explica una capacidad —poner en contexto y procesar en paralelo—, no garantiza que haya identificado bien un evento. La validez sigue dependiendo del dise&ntilde;o posterior.</div></li>
+        </ul>
+
+    </section>
+
+    <!-- Slide 5: BERT -->
+    <section class="slide" data-slide="05">
+        <span class="slide-number">05 / 17</span>
+        <div class="eyebrow">Encoder bidireccional &middot; 2019</div>
+        <h2 class="slide-title">BERT convirti&oacute; el contexto en una <em>herramienta de medici&oacute;n</em></h2>
+        <p class="slide-lead">BERT fue el primer uso metodol&oacute;gico fuerte de esta arquitectura: aprendi&oacute; de mucho texto sin etiquetar, mirando lo que est&aacute; antes y despu&eacute;s de cada palabra. La misma palabra puede representarse distinto seg&uacute;n la oraci&oacute;n, y despu&eacute;s puede adaptarse a tareas nuevas con pocos ejemplos.</p>
+
+        <div class="rule"></div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>Aprender antes, adaptar despu&eacute;s.</strong> Aprende patrones generales del lenguaje antes de aplicarse a una tarea concreta. Por eso puede adaptarse a nuevos problemas con menos datos etiquetados.</div></li>
+            <li><span></span><div><strong>Una base, varias tareas.</strong> La misma base sirve para clasificar si una nota contiene un evento, para identificar qui&eacute;n, d&oacute;nde y cu&aacute;ndo, o para comparar textos. Es una plantilla para construir clasificadores desde un codebook.</div></li>
+            <li><span></span><div><strong>L&iacute;mites que quedan.</strong> Si el texto es largo, la relaci&oacute;n entre fecha, lugar y evento puede cortarse. El modelo puede aprender inconsistencias de quienes etiquetaron. Un buen puntaje no prueba que mida bien el concepto. El cambio de medio, idioma o &eacute;poca sigue siendo un problema.</div></li>
+            <li><span></span><div><strong>Perfil.</strong> Es eficiente para etiquetar, pero no genera por s&iacute; solo un registro abierto y estructurado. Para tareas repetitivas, estables y de mucho volumen, un modelo chico adaptado puede ser m&aacute;s barato, r&aacute;pido y controlable que uno conversacional.</div></li>
+        </ul>
+
+    </section>
+
+    <!-- Slide 6: GPT -->
+    <section class="slide" data-slide="06">
+        <span class="slide-number">06 / 17</span>
+        <div class="eyebrow">Decoder autoregresivo &middot; 2020&ndash;2023</div>
+        <h2 class="slide-title">GPT convirti&oacute; la instrucci&oacute;n en una <em>interfaz de an&aacute;lisis</em></h2>
+        <p class="slide-lead">Los modelos autoregresivos cambian la interfaz de trabajo: en lugar de dise&ntilde;ar s&oacute;lo un vector de variables y una cabeza de clasificaci&oacute;n, el investigador puede describir una tarea —dar una definici&oacute;n, mostrar ejemplos y fijar un formato de salida verificable—. La tarea deja de expresarse s&oacute;lo como features: puede formularse como instrucci&oacute;n.</p>
+
+        <div class="rule"></div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>GPT-3 (2020): aprender con ejemplos en el pedido.</strong> Mostr&oacute; que se pueden resolver tareas nuevas incluyendo ejemplos directamente en la instrucci&oacute;n, sin reentrenar el modelo. As&iacute;, el texto del pedido se volvi&oacute; parte del dise&ntilde;o: qu&eacute; categor&iacute;as usar, qu&eacute; formato de salida y cu&aacute;ndo dejar vac&iacute;o.</div></li>
+            <li><span></span><div><strong>InstructGPT (2022): aprender a seguir instrucciones.</strong> Se entren&oacute; para responder mejor a lo que pedimos, usando ejemplos y preferencias de personas. Con mucho menos tama&ntilde;o, logr&oacute; respuestas m&aacute;s &uacute;tiles y f&aacute;ciles de usar.</div></li>
+            <li><span></span><div><strong>ChatGPT: conversaci&oacute;n y formatos ordenados.</strong> Normaliz&oacute; hablar con el modelo y pedirle respuestas estructuradas, como una lista o una tabla. Eso baj&oacute; la fricci&oacute;n para probar r&aacute;pido nuevas variables o formas de extraer datos.</div></li>
+            <li><span></span><div><strong>El costo de la facilidad.</strong> Estos modelos est&aacute;n optimizados para agradar, no para medir con precisi&oacute;n: si falta una fecha en la noticia, pueden inventarla. Por eso siempre hace falta un codebook con reglas claras para valores vac&iacute;os y con evidencia en el texto. Un lindo pedido no garantiza una medici&oacute;n v&aacute;lida y replicable.</div></li>
+        </ul>
+
+    </section>
+
+    <!-- Slide 7: Convivencia BERT/GPT -->
+    <section class="slide" data-slide="07">
+        <span class="slide-number">07 / 17</span>
+        <div class="eyebrow">Arquitectura y tarea</div>
+        <h2 class="slide-title">BERT y GPT conviven porque responden a <em>problemas distintos</em></h2>
+        <p class="slide-lead">Esta comparaci&oacute;n evita la idea de reemplazo: optimizan problemas distintos y la elecci&oacute;n no es por fecha, sino por tarea, volumen, control y posibilidad de auditar. Lo que importa no es el tama&ntilde;o bruto, sino la combinaci&oacute;n de tipo de modelo, dominio, codebook, formato de salida y criterio de evaluaci&oacute;n.</p>
+
+        <div class="rule"></div>
+
+        <div class="two-col">
+            <div class="col-block">
+                <h3>Especializado (tipo BERT)</h3>
+                <p><strong>Objetivo:</strong> representar el texto. <strong>Salida:</strong> etiqueta o fragmento. <strong>Fuerte en:</strong> clasificar y buscar. <strong>Control:</strong> local y estable. <strong>En dise&ntilde;o h&iacute;brido:</strong> m&oacute;dulo que ejecuta a escala tareas cerradas.</p>
+            </div>
+            <div class="col-block">
+                <h3>Conversacional (tipo GPT)</h3>
+                <p><strong>Objetivo:</strong> producir continuaci&oacute;n. <strong>Salida:</strong> texto libre o estructurado simple. <strong>Fuerte en:</strong> instrucciones, s&iacute;ntesis y extracci&oacute;n flexible. <strong>Control:</strong> depende del pedido y del proveedor. <strong>En dise&ntilde;o h&iacute;brido:</strong> orquesta o genera para casos m&aacute;s abiertos.</p>
+            </div>
+        </div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>H&iacute;brido por dise&ntilde;o.</strong> Muchas buenas aplicaciones combinan: el grande ayuda a dise&ntilde;ar o generar ejemplos, el chico ejecuta a escala y la revisi&oacute;n humana entra en casos dudosos. Agregar m&aacute;s c&oacute;mputo cambia la estrategia, pero no resuelve por s&iacute; sola la validez del concepto.</div></li>
+        </ul>
+
+    </section>
+
+    <!-- Slide 8: Selección de modelo -->
+    <section class="slide" data-slide="08">
+        <span class="slide-number">08 / 17</span>
+        <div class="eyebrow">Criterio de selecci&oacute;n</div>
+        <h2 class="slide-title">El mejor modelo depende de <em>tarea, dominio y control</em></h2>
+        <p class="slide-lead">La experiencia reciente muestra que los modelos m&aacute;s chicos y especializados pueden rendir tan bien, o mejor, que los muy grandes. &ldquo;M&aacute;s grande&rdquo; no es una regla para elegir.</p>
+
+        <div class="rule"></div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>Tarea.</strong> Si la categor&iacute;a es com&uacute;n y est&aacute; bien definida, conviene un modelo chico adaptado donde la regla del codebook se escribe de forma expl&iacute;cita. Si la tarea es nueva o la salida es m&aacute;s abierta y variable, conviene un modelo conversacional grande.</div></li>
+            <li><span></span><div><strong>Pocos ejemplos.</strong> Con muy pocos casos etiquetados, un modelo especializado puede aprender en segundos en una laptop, mientras que uno grande necesita mucho m&aacute;s tiempo y recursos. Con un poco m&aacute;s de ejemplos, el chico puede alcanzar o superar el desempe&ntilde;o humano de referencia.</div></li>
+            <li><span></span><div><strong>Domino, costo y tiempos.</strong> Los modelos chicos y locales son m&aacute;s baratos, r&aacute;pidos y f&aacute;ciles de reproducir. Los grandes ofrecen m&aacute;s versatilidad de lenguaje, pero a costa de mayor costo, lentitud y dependencia de un proveedor. Si necesitamos volumen, velocidad o control, el especializado suele ser preferible.</div></li>
+            <li><span></span><div><strong>La elecci&oacute;n importa.</strong> El modelo se elige probando con un conjunto de prueba propio que incluya casos dif&iacute;ciles y criterios de error relevantes para nuestro proyecto. El error de medici&oacute;n no es menor: puede cambiar los resultados y las conclusiones estad&iacute;sticas.</div></li>
+        </ul>
+
+    </section>
+
+    <!-- Slide 9: Abierto/cerrado -->
+    <section class="slide" data-slide="09">
+        <span class="slide-number">09 / 17</span>
+        <div class="eyebrow">Apertura y propiedad</div>
+        <h2 class="slide-title">Apertura y propiedad: <em>decisiones de investigaci&oacute;n</em></h2>
+        <p class="slide-lead">La distinci&oacute;n abierto/cerrado es una decisi&oacute;n de dise&ntilde;o que afecta privacidad, costos, velocidad y posibilidad de replicar. Abierto no es autom&aacute;ticamente reproducible; cerrado no es autom&aacute;ticamente inv&aacute;lido. Guardar solo los pesos no alcanza: tambi&eacute;n importan el pedido, la forma de procesar el texto, el equipo, las configuraciones y las versiones usadas.</p>
+
+        <div class="rule"></div>
+
+        <div class="two-col">
+            <div class="col-block">
+                <h3>Modelos abiertos / locales</h3>
+                <ul class="editorial-list">
+                    <li><span></span><div><strong>+</strong> Permiten guardar versi&oacute;n y entorno, trabajar con datos sensibles en local, ajustar y auditar. Uno local versionado puede servir como base de replicaci&oacute;n aunque uno comercial rinda un poco mejor al inicio.</div></li>
+                    <li><span></span><div><strong>&minus;</strong> Requieren equipo, licencias y mantenimiento.</div></li>
+                </ul>
+            </div>
+            <div class="col-block">
+                <h3>Modelos comerciales / API</h3>
+                <ul class="editorial-list">
+                    <li><span></span><div><strong>+</strong> Acceso r&aacute;pido y gran capacidad sin montar infraestructura propia.</div></li>
+                    <li><span></span><div><strong>&minus;</strong> Cambios internos sin aviso, versiones que desaparecen, costos, l&iacute;mites y dependencia: una configuraci&oacute;n exacta puede dejar de existir.</div></li>
+                </ul>
+            </div>
+        </div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>La variabilidad en el tiempo existe.</strong> Hay casos donde cambios de API y retiro de versiones impidieron repetir el proceso: se puede perder el acceso al sistema exacto que gener&oacute; los datos. Regla m&iacute;nima: documentar modelo, versi&oacute;n, pedido, configuraciones, muestra y fecha; repetir corridas cr&iacute;ticas y archivar lo posible.</div></li>
+        </ul>
+
+    </section>
+
+    <!-- Slide 10: Codebooks implícitos -->
+    <section class="slide" data-slide="10">
+        <span class="slide-number">10 / 17</span>
+        <div class="eyebrow">Codebooks impl&iacute;citos</div>
+        <h2 class="slide-title">Todo prompt activa un codebook, <em>aunque no lo declare</em></h2>
+        <p class="slide-lead">Pedir a un LLM que &ldquo;clasifique protestas&rdquo; sin una definici&oacute;n detallada no elimina la operacionalizaci&oacute;n: la delega al modelo. Con un label desnudo, el modelo aplica una definici&oacute;n aprendida durante el preentrenamiento —opaca, distinta de nuestro concepto y variable entre versiones—. Halterman lo prob&oacute; con vi&ntilde;etas que a&iacute;slan dimensiones de la definici&oacute;n de protesta —cantidad de participantes, violencia, vigilias, huelgas, protestas diplom&aacute;ticas— frente a los codebooks expertos de ACE, ACLED, CAMEO y CCC.</p>
+
+        <div class="rule"></div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>Coinciden en lo claro, difieren en lo que nos importa.</strong> Todos marcan como protesta una marcha masiva y como no-protesta una reuni&oacute;n com&uacute;n. Pero se separan en casos intermedios, como vigilias, manifestaciones de apoyo a una pol&iacute;tica o huelgas. Los manuales expertos tampoco coinciden entre s&iacute; en cu&aacute;ntas personas hacen falta o qu&eacute; cuenta como protesta.</div></li>
+            <li><span></span><div><strong>No hay una definici&oacute;n impl&iacute;cita &uacute;nica.</strong> Cada modelo trae su propia idea de qu&eacute; es protesta, aprendida durante el entrenamiento. Ninguno coincide del todo con los manuales expertos: el que m&aacute;s se acerca falla en uno de cada cinco aspectos. Con el mismo pedido, un modelo puede incluir protestas violentas y otro excluirlas, cambiando el dataset.</div></li>
+            <li><span></span><div><strong>La redacci&oacute;n del pedido importa.</strong> Peque&ntilde;os cambios en c&oacute;mo escribimos la instrucci&oacute;n modifican la definici&oacute;n que aplica el modelo, por ejemplo frente a la violencia de los manifestantes. Adem&aacute;s aparecen atajos por palabras: si el texto dice &ldquo;protest&rdquo;, muchos modelos lo marcan como protesta aunque sea una queja diplom&aacute;tica formal.</div></li>
+            <li><span></span><div><strong>Qu&eacute; tenemos que explicitar.</strong> La definici&oacute;n con criterios de inclusi&oacute;n, exclusi&oacute;n y casos l&iacute;mite; ejemplos de casos claros, dif&iacute;ciles y negativos; qu&eacute; campos debe devolver, con qu&eacute; evidencia textual y cu&aacute;ndo dejar vac&iacute;o; y c&oacute;mo vamos a probar que el modelo realmente sigue nuestra definici&oacute;n.</div></li>
+        </ul>
+
+        <div class="pull-quote pull-quote--centered-line">
+            <blockquote>&ldquo;Una etiqueta breve no es una operacionalizaci&oacute;n.&rdquo;</blockquote>
+        </div>
+
+    </section>
+
+    <!-- Slide 11: MPEDS -->
+    <section class="slide" data-slide="11">
+        <span class="slide-number">11 / 17</span>
+        <div class="eyebrow">Antecedente &middot; Hanna (2017)</div>
+        <h2 class="slide-title">La automatizaci&oacute;n de protestas comenz&oacute; <em>antes de ChatGPT</em></h2>
+        <p class="slide-lead">MPEDS organiz&oacute; el problema de forma que todav&iacute;a reconocemos: buscar fuentes, identificar noticias pertinentes, clasificar si describen un evento, codificar atributos y producir una serie anal&iacute;tica. El proyecto trabaj&oacute; sobre unos 20.000 art&iacute;culos &uacute;nicos de medios estadounidenses, con cinco a ocho codificadores durante menos de dos a&ntilde;os; unos 3.000 art&iacute;culos positivos pasaron a una segunda ronda de codificaci&oacute;n.</p>
+
+        <div class="rule"></div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>Tres tareas.</strong> Primero, filtrar qu&eacute; notas hablan de protesta. Segundo, clasificar con categor&iacute;as cerradas como forma, tema y a qui&eacute;n se dirige, con rendimiento desigual seg&uacute;n la clase. Tercero, extraer informaci&oacute;n abierta como tama&ntilde;o, lugar y organizaciones, con aciertos parciales.</div></li>
+            <li><span></span><div><strong>Qu&eacute; resolv&iacute;a.</strong> Bajaba costos y tiempos para encontrar textos relevantes y registrar acci&oacute;n colectiva con reglas claras. Guardaba el rastro de cada dato —fuente, t&iacute;tulo y enlace— y apostaba a la apertura y la posibilidad de replicar.</div></li>
+            <li><span></span><div><strong>Qu&eacute; no resolv&iacute;a.</strong> La cobertura era desigual y le costaban las categor&iacute;as raras y los cambios de contexto. Solo tomaba un evento por nota, no resolv&iacute;a expresiones como &ldquo;ayer&rdquo; y no unificaba notas que hablaban del mismo hecho. Recuperaba la cobertura de los medios que miraba, no el total real de protestas: cambiar las fuentes cambia qu&eacute; se ve.</div></li>
+            <li><span></span><div><strong>Por qu&eacute; importan las fuentes.</strong> El an&aacute;lisis de Black Lives Matter mostr&oacute; que los medios locales cuentan mucho. El sesgo de qu&eacute; cubren los medios no es un detalle t&eacute;cnico: tiene que ser parte del argumento sustantivo.</div></li>
+        </ul>
+
+        <div class="pull-quote pull-quote--centered-line">
+            <blockquote>&ldquo;Automatizar la detecci&oacute;n no equivale a observar la protesta sin mediaciones.&rdquo;</blockquote>
+        </div>
+
+    </section>
+
+    <!-- Slide 12: Giro híbrido -->
+    <section class="slide" data-slide="12">
+        <span class="slide-number">12 / 17</span>
+        <div class="eyebrow">Pipelines modulares</div>
+        <h2 class="slide-title">El giro h&iacute;brido: descomponer el evento en <em>m&oacute;dulos</em></h2>
+        <p class="slide-lead">La unidad t&eacute;cnica deja de ser una caja negra: cada m&oacute;dulo —descubrir, clasificar, extraer, vincular, auditar— puede evaluarse, sustituirse y documentarse por separado, porque cada paso tiene un tipo de fallo distinto. Un clasificador de alta precisi&oacute;n no compensa una mala resoluci&oacute;n de fechas, y un LLM que propone actores no sustituye una pol&iacute;tica expl&iacute;cita para desduplicar noticias que describen el mismo evento.</p>
+
+        <div class="rule"></div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>Bag-of-Tricks (2023).</strong> Combina varias t&eacute;cnicas para producir datos de eventos sin usar diccionarios cerrados. Con pocos documentos etiquetados puede construir una base de cobertura global y replicar bases existentes de violencia pol&iacute;tica. Muestra que con decenas de ejemplos por clase y pocos minutos de entrenamiento se puede lograr un rendimiento comparable al de modelos mucho m&aacute;s grandes.</div></li>
+            <li><span></span><div><strong>PAPEA (2025).</strong> Pipeline modular con modelos especializados, reglas y herramientas p&uacute;blicas aplicado a prensa local alemana entre 2000 y 2020. A partir de cientos de miles de notas de casi un centenar de peri&oacute;dicos, produce decenas de miles de eventos —muchos m&aacute;s que los que ofrece un dataset nacional— y logra recuperar la ola de Fridays for Future que los nacionales no ve&iacute;an.</div></li>
+            <li><span></span><div><strong>Cada m&oacute;dulo se eval&uacute;a por separado.</strong> Algunos pasos funcionan muy bien, como identificar la forma de la protesta; otros, como el lugar, tambi&eacute;n rinden bien. La fecha es m&aacute;s dif&iacute;cil y todav&iacute;a requiere revisi&oacute;n humana para ser exacta. La comparaci&oacute;n con modelos conversacionales muestra que el idioma, el contexto, el codebook y la tarea espec&iacute;fica importan m&aacute;s que la etiqueta gen&eacute;rica &ldquo;LLM&rdquo;.</div></li>
+        </ul>
+
+    </section>
+
+    <!-- Slide 13: Texto sintético (nuevo, desde el informe complementario) -->
+    <section class="slide" data-slide="13">
+        <span class="slide-number">13 / 17</span>
+        <div class="eyebrow">Estrategia h&iacute;brida</div>
+        <h2 class="slide-title">Texto sint&eacute;tico: el LLM como <em>generador de datos</em></h2>
+        <p class="slide-lead">Halterman (2025) propone un tercer camino entre el clasificador tradicional y el LLM directo: usar el modelo generativo en la tarea donde es m&aacute;s fuerte —generar texto— para producir ejemplos sint&eacute;ticos, y entrenar despu&eacute;s un modelo peque&ntilde;o y tradicional. El LLM se retira del an&aacute;lisis masivo; el modelo final es m&aacute;s veloz, barato, ejecutable localmente, inspeccionable y compartible.</p>
+
+        <div class="rule"></div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>Tres pruebas.</strong> Se prob&oacute; en tres casos muy distintos: actuaci&oacute;n policial en India, populismo en manifiestos de decenas de pa&iacute;ses y reconocimiento de menciones en tweets sobre la guerra de Ucrania. En los tres, sumar texto sint&eacute;tico a pocas etiquetas reales mejor&oacute; el rendimiento e incluso super&oacute; a modelos entrenados con muchos m&aacute;s datos reales.</div></li>
+            <li><span></span><div><strong>Control de calidad.</strong> No alcanza con que el texto se lea bien: hay que comprobar que lo sint&eacute;tico se parece a lo real y que cubre toda la variedad. El generador puede repetir las mismas f&oacute;rmulas u omitir casos raros, y eso no se ve a simple vista.</div></li>
+            <li><span></span><div><strong>Insumo, no evidencia.</strong> El texto sint&eacute;tico puede inventar hechos y arrastrar sesgos del modelo. Por eso se marca, se guarda separado y nunca se usa para sacar conclusiones sobre el mundo. Generar ejemplos para entrenar no es inventar fechas, lugares o actores para completar una tabla.</div></li>
+            <li><span></span><div><strong>Para protesta.</strong> Sirve para compensar clases poco frecuentes, como ocupaciones o acciones simb&oacute;licas, siempre que se eval&uacute;e contra notas reales, se informe cu&aacute;ntos ejemplos sint&eacute;ticos se usaron y se deje registro exacto de c&oacute;mo se generaron.</div></li>
+        </ul>
+
+    </section>
+
+    <!-- Slide 14: Benchmark ConfliBERT -->
+    <section class="slide" data-slide="14">
+        <span class="slide-number">14 / 17</span>
+        <div class="eyebrow">Benchmark situado</div>
+        <h2 class="slide-title">En conflictos, el rendimiento es una <em>pregunta emp&iacute;rica</em></h2>
+        <p class="slide-lead">Brandt y colegas comparan un modelo chico y especializado en conflicto con modelos conversacionales grandes, ejecutados localmente en condiciones realistas de investigaci&oacute;n, no de laboratorio ideal.</p>
+
+        <div class="rule"></div>
+
+        <div class="two-col">
+            <div class="col-block">
+                <h3>Especializado</h3>
+                <p>En noticias y en tipos de ataque, el modelo especializado rinde claramente mejor en su dominio. Respeta el esquema de etiquetas, no inventa categor&iacute;as nuevas y mantiene la disciplina del formato.</p>
+            </div>
+            <div class="col-block">
+                <h3>Conversacionales grandes</h3>
+                <p>Los grandes se acercan en algunos casos, pero en general rinden menos y, por su flexibilidad, a veces inventan etiquetas que no existen, como <em>Event</em> o <em>PhoneNumber</em>. M&aacute;s vers&aacute;tiles, pero menos rigurosos con el formato pedido.</p>
+            </div>
+        </div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>El tiempo es factibilidad.</strong> El especializado clasifica en pocos segundos; los grandes pueden tardar muchos minutos. Uno trabaja en lote, el otro palabra por palabra. Esa diferencia decide si el procedimiento se puede aplicar a decenas o cientos de miles de textos.</div></li>
+            <li><span></span><div><strong>No es una ley general.</strong> El resultado depende de los datos, las etiquetas, el modelo, el pedido y c&oacute;mo evaluamos. La ventaja del especializado vale en temas cercanos a su entrenamiento. Una salida que rompe el esquema puede ser m&aacute;s costosa que un falso negativo. Contar de m&aacute;s o de menos algunos tipos cambia las series y las conclusiones.</div></li>
+        </ul>
+
+    </section>
+
+    <!-- Slide 15: ChatGPT extracción -->
+    <section class="slide" data-slide="15">
+        <span class="slide-number">15 / 17</span>
+        <div class="eyebrow">Evidencia aplicada &middot; 2023</div>
+        <h2 class="slide-title">ChatGPT agiliza la extracci&oacute;n, <em>no la valida</em></h2>
+        <p class="slide-lead">Un equipo prob&oacute; modelos conversacionales para extraer fecha y lugar de notas sobre protestas. Son dos datos dif&iacute;ciles porque no siempre est&aacute;n expl&iacute;citos: &ldquo;ayer&rdquo; requiere la fecha de publicaci&oacute;n y una calle puede implicar la ciudad del diario. El ejercicio se hizo sobre protestas de Black Lives Matter, con foco en esos dos atributos.</p>
+
+        <div class="rule"></div>
+
+        <ul class="editorial-list">
+            <li><span></span><div><strong>Rutina en varios pasos.</strong> El lugar y la fecha se preguntan m&aacute;s de una vez y con formulaciones distintas. Se toma la respuesta m&aacute;s repetida. Repetir no garantiza independencia, pero sirve como se&ntilde;al de inestabilidad: si no coincide, el caso es dudoso.</div></li>
+            <li><span></span><div><strong>Resultados.</strong> Fecha y lugar coinciden en la gran mayor&iacute;a de los casos con la codificaci&oacute;n previa. Al revisar las diferencias, muchas veces el modelo ten&iacute;a raz&oacute;n, con apenas un d&iacute;a de diferencia. Pero la comparaci&oacute;n es contra una codificaci&oacute;n existente, no contra una verdad externa independiente.</div></li>
+            <li><span></span><div><strong>La inconsistencia avisa.</strong> Cuando los distintos pasos coinciden, el acuerdo con la codificaci&oacute;n humana es muy alto; cuando no coinciden, baja bastante. Si falta informaci&oacute;n, el modelo puede inventar una ciudad conocida. Por eso la salida debe permitir dejar vac&iacute;o y pedir siempre la evidencia en el texto, no solo un valor.</div></li>
+            <li><span></span><div><strong>Alcance.</strong> Las notas ya ven&iacute;an preseleccionadas, no se evalu&oacute; el filtro inicial, ni la unificaci&oacute;n de notas del mismo hecho ni el esquema completo de eventos. El pedido puede estar ajustado a los casos de prueba. La salida no es el dato final: es una hip&oacute;tesis que debe guardar la evidencia, pasar por un conjunto de prueba propio y tener correcci&oacute;n humana.</div></li>
+        </ul>
+
+    </section>
+
+    <!-- Slide 16: Validación -->
+    <section class="slide" data-slide="16">
+        <span class="slide-number">16 / 17</span>
+        <div class="eyebrow">Criterio de cierre</div>
+        <h2 class="slide-title">Validar el procedimiento, <em>no confiar en la salida</em></h2>
+        <p class="slide-lead">En distintas pruebas de codificaci&oacute;n, los modelos suelen superar en precisi&oacute;n al trabajo de anotaci&oacute;n humana, pero con mayor variaci&oacute;n en el tiempo. Dos modelos con rendimiento similar pueden producir estimaciones muy distintas, y peque&ntilde;os cambios en la medici&oacute;n pueden alterar resultados centrales de un an&aacute;lisis. La pregunta final no es &ldquo;&iquest;qu&eacute; respondi&oacute; el modelo?&rdquo;, sino &ldquo;&iquest;qu&eacute; evidencia respalda esta medida?&rdquo;.</p>
+
+        <div class="rule"></div>
+
+        <div class="two-col">
+            <div class="col-block">
+                <h3>Riesgos que quedan</h3>
+                <p>Definici&oacute;n impl&iacute;cita o incompleta; corpus con cobertura selectiva; configuraciones inestables en el tiempo; buen puntaje pero inferencia d&eacute;bil; invenciones del modelo, sesgos y posibles usos de vigilancia sobre las comunidades observadas.</p>
+            </div>
+            <div class="col-block">
+                <h3>Un dise&ntilde;o defendible</h3>
+                <p>Definir concepto y alcance desde el inicio; armar un conjunto de prueba propio con casos claros, dif&iacute;ciles, negativos y l&iacute;mite; probar varias veces y por tipo de dato; guardar modelo, pedido, entorno y datos; considerar c&oacute;mo cambian los resultados con codificaciones alternativas; revisi&oacute;n humana en casos dudosos y principio de no hacer da&ntilde;o.</p>
+            </div>
+        </div>
+
+        <div class="pull-quote pull-quote--centered-line">
+            <blockquote>&ldquo;M&aacute;s escala es m&aacute;s capacidad de comprobaci&oacute;n; no sustituye teor&iacute;a, fuentes ni juicio metodol&oacute;gico.&rdquo;</blockquote>
+        </div>
+
+    </section>
+
+    <!-- Slide 17: Cierre + Práctica -->
+    <section class="slide" data-slide="17">
+        <span class="slide-number">17 / 17</span>
+        <div class="eyebrow">Cierre &middot; Parte pr&aacute;ctica</div>
+        <h2 class="slide-title">Del marco al <em>taller pr&aacute;ctico</em></h2>
+
+        <div class="rule"></div>
+
+        <div class="feature-grid">
+            <a class="feature-card" href="https://colab.research.google.com/drive/1yukWg9d9Sb6NQt4nws1pNYo8HJ9uvcKu" target="_blank" rel="noopener noreferrer">
+                <span class="num">Colab &middot; Parte pr&aacute;ctica</span>
+                <h4>Taller pr&aacute;ctico &mdash; de BERT a ChatGPT</h4>
+                <p>https://colab.research.google.com/drive/1yukWg9d9Sb6NQt4nws1pNYo8HJ9uvcKu</p>
+            </a>
+        </div>
+
+        <div class="pull-quote pull-quote--centered-line">
+            <blockquote>Validar el procedimiento, no confiar en la salida.</blockquote>
+        </div>
+    </section>
+
+    <nav class="nav">
+        <div class="nav-controls">
+            <button id="prev-btn" class="nav-btn" aria-label="Anterior">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button id="next-btn" class="nav-btn" aria-label="Siguiente">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+        </div>
+        <div class="nav-progress">
+            <span id="slide-counter">01 / 17</span>
+            <div class="nav-progress-bar">
+                <div id="progress-fill" class="nav-progress-fill" style="width: 5.88%"></div>
+            </div>
+        </div>
+    </nav>
+
+    <script src="js/bg-code.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
