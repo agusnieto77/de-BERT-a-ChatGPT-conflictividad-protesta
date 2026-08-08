@@ -1,5 +1,5 @@
 /**
- * SlideController — Vibe Coding
+ * SlideController
  * Navegaci&oacute;n minimal para el sistema de presentaci&oacute;n editorial.
  */
 class SlideController {

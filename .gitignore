@@ -1,0 +1,17 @@
+# Estado de tooling / agentes
+.claude/
+.atl/
+
+# Borradores y materiales de trabajo (no forman parte del sitio publicado)
+MEJORAS_VISUALES.md
+MODELO_*
+datos-taller.txt
+*.pptx
+*.pdf
+
+# Artefactos de verificacion
+.playwright-mcp/
+
+# Ruido de sistema
+Thumbs.db
+.DS_Store

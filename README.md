@@ -12,7 +12,7 @@ Taller abierto: Introducción a la automatización del análisis de la protesta 
 
 Una vez publicado en GitHub Pages: https://agusnieto77.github.io/de-BERT-a-ChatGPT-conflictividad-protesta/
 
-Local: abrir `index.html` o `de_BERT_a_ChatGPT_conflictividad_protesta.html`
+Local: abrir `index.html`
 
 ## Taller práctico
 
@@ -20,7 +20,7 @@ Local: abrir `index.html` o `de_BERT_a_ChatGPT_conflictividad_protesta.html`
 
 ## Estructura
 
-- `index.html` - Presentación principal (copia de `de_BERT_a_ChatGPT_conflictividad_protesta.html` para GitHub Pages)
+- `index.html` - Presentación principal (17 slides)
 - `css/styles.css`
 - `js/app.js` + `js/bg-code.js`
 - `img/footer.png`

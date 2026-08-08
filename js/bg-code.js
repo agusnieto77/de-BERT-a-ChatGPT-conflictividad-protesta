@@ -27,16 +27,8 @@
   }
 
   // Configuracion
-  const COLUMNS_PER_SIDE = 8;   // 8 columnas por lado -> 16 totales (mas tupido)
-  const MARGIN_WIDTH = 200;     // 20px menos que antes (era 220)
-  const CHAR_FONT_SIZE = 13;    // un poco mas chico para mayor densidad visual
-  const CHAR_LINE_HEIGHT = 1.35;
-  const CHAR_WIDTH = 9;         // ancho aproximado por caracter (monospace)
-  const CHAR_GAP = 4;           // espacio entre caracteres para evitar solapamiento
-
-  // Espaciado horizontal entre columnas: ancho caracter + gap
-  // Cada columna ocupa ~13px de ancho efectivo, las separamos 18px
-  const COLUMN_SPACING = 24;    // px entre columnas (mayor para no solapar)
+  const COLUMNS_PER_SIDE = 8;   // 8 columnas por lado -> 16 totales
+  const MARGIN_WIDTH = 200;     // ancho del margen lateral donde llueve
 
   // Generar posiciones horizontales fijas (no aleatorias) para que las
   // columnas no se superpongan entre si. Distribuimos en el ancho del margen.
@@ -127,17 +119,6 @@
     rightPositions.forEach((pos, i) => {
       setTimeout(() => spawnColumn(container, 'right', pos), i * 250 + 150);
     });
-
-    // Spawn continuo: si una columna desaparece (no es el caso con position absolute
-    // pero por si el viewport cambia), generamos nuevas
-    setInterval(() => {
-      if (container.querySelectorAll('.matrix-rain-col').length < (COLUMNS_PER_SIDE * 2) * 0.7) {
-        const side = Math.random() < 0.5 ? 'left' : 'right';
-        const positions = side === 'left' ? leftPositions : rightPositions;
-        const pos = positions[Math.floor(Math.random() * positions.length)];
-        spawnColumn(container, side, pos);
-      }
-    }, 4000);
   }
 
   if (document.readyState === 'loading') {
