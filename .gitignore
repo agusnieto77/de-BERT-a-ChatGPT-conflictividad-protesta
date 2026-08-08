@@ -2,12 +2,13 @@
 .claude/
 .atl/
 
-# Borradores y materiales de trabajo (no forman parte del sitio publicado)
-MEJORAS_VISUALES.md
-MODELO_*
-datos-taller.txt
-*.pptx
-*.pdf
+# Borradores y materiales de trabajo (no forman parte del sitio publicado).
+# Anclados a la raíz para no ocultar assets futuros en subdirectorios.
+/MEJORAS_VISUALES.md
+/MODELO_*
+/datos-taller.txt
+/*.pptx
+/*.pdf
 
 # Artefactos de verificacion
 .playwright-mcp/
